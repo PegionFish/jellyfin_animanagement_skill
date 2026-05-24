@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.swp
+*.swo
+.DS_Store
+*.cache
+.bangumi_cache.json
