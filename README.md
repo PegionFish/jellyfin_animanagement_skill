@@ -66,16 +66,17 @@ Agent：自动执行 Step 1-8
 ## CSV 格式
 
 ```csv
-cn_name,jp_name,year,type,folder_name,bangumi_id,status
+jp_name,cn_name,en_name,year,type,folder_name,bangumi_id,status
 ```
 
 | 列 | 说明 |
 |---|---|
-| `cn_name` | 中文名（来自 Bangumi name_cn） |
-| `jp_name` | 日文名/罗马音 |
+| `jp_name` | **主键** — 日文名/罗马音（来自 Bangumi name），以此为准 |
+| `cn_name` | 中文名（来自 Bangumi name_cn），辅助参考 |
+| `en_name` | 英文名，辅助交叉验证 |
 | `year` | 发行年份 |
 | `type` | `tv` / `movie` / `concert` / `ova` / `special` |
-| `folder_name` | 标准化文件夹名 |
+| `folder_name` | 标准化文件夹名（日文罗马音/英文） |
 | `bangumi_id` | Bangumi 条目 ID |
 | `status` | `confirmed` / `new` |
 

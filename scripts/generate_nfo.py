@@ -135,7 +135,8 @@ def process_series(row, cache, force_refresh, base):
         stats['errors'] += 1
         return
 
-    title = data.get('name_cn') or data.get('name', '')
+    # jp_name (name) 优先，cn_name (name_cn) 仅作参考
+    title = data.get('name', '') or data.get('name_cn', '')
     orig_title = data.get('name', '')
     plot = (data.get('summary', '') or '')[:800]
     premiered = data.get('date', '')
@@ -241,7 +242,8 @@ def process_movie_or_concert(row, cache, force_refresh, base):
         stats['errors'] += 1
         return
 
-    title = data.get('name_cn') or data.get('name', '')
+    # jp_name (name) 优先，cn_name (name_cn) 仅作参考
+    title = data.get('name', '') or data.get('name_cn', '')
     orig_title = data.get('name', '')
     plot = (data.get('summary', '') or '')[:800]
     premiered = data.get('date', '')
@@ -315,7 +317,8 @@ def main():
     cache = load_cache(CACHE_PATH)
     log(f"缓存中 {len(cache)} 条记录", 'CACHE')
 
-    # 读取 CSV（格式：cn_name,jp_name,year,type,folder_name,bangumi_id,status）
+    # 读取 CSV（格式：jp_name,cn_name,en_name,year,type,folder_name,bangumi_id,status）
+    # jp_name 为主键，cn_name 仅作参考，en_name 辅助交叉验证
     if not os.path.exists(CSV_PATH):
         log(f"CSV 文件不存在: {CSV_PATH}", 'ERR')
         sys.exit(1)
@@ -329,7 +332,8 @@ def main():
             if bid and bid.isdigit():
                 content_type = row.get('type', '').strip().lower()
                 entries.append({
-                    'series_name': row.get('cn_name', '').strip() or row.get('jp_name', '').strip(),
+                    'series_name': row.get('jp_name', '').strip() or row.get('cn_name', '').strip(),
+                    'en_name': row.get('en_name', '').strip(),
                     'year': row.get('year', '').strip(),
                     'folder_name': row.get('folder_name', '').strip(),
                     'bangumi_id': bid,
